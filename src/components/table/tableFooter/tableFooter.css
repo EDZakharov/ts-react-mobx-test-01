@@ -1,0 +1,6 @@
+.table__footer {
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+}

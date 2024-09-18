@@ -1,0 +1,8 @@
+.table__body {
+  height: 600px;
+  overflow-y: scroll;
+  font-size: 14px;
+  line-height: 20px;
+  display: flex;
+  flex-direction: column;
+}

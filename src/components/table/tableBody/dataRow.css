@@ -1,0 +1,34 @@
+.table__body__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e5eb;
+}
+
+.row__column {
+  padding: 6px 12px;
+}
+
+.row__column.num {
+  flex-basis: 5%;
+}
+.row__column.type {
+  flex-basis: 10%;
+}
+.row__column.date {
+  flex-basis: 15%;
+}
+.row__column.auto {
+  flex-basis: 10%;
+}
+.row__column.curr {
+  flex-basis: 10%;
+}
+.row__column.addr {
+  flex-basis: 30%;
+}
+.row__column.desc {
+  flex-basis: 20%;
+}

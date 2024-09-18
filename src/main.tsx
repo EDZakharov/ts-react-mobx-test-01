@@ -1,24 +1,25 @@
-import { createContext, StrictMode } from 'react'
-import { Container, createRoot } from 'react-dom/client'
-import { App } from './app'
-import RootStore from './mobx/store.ts'
+import { createContext, StrictMode } from 'react';
+import { Container, createRoot } from 'react-dom/client';
 
-const store = RootStore.create({})
+import { App } from './App.tsx';
+import RootStore from './mobx/store.ts';
 
-export const StoreContext = createContext(store)
+const store = RootStore.create({});
 
-let container: Container | null = null
+export const StoreContext = createContext(store);
+
+let container: Container | null = null;
 
 document.addEventListener('DOMContentLoaded', function () {
-	if (!container) {
-		container = document.getElementById('root') as HTMLElement
-		const root = createRoot(container)
-		root.render(
-			<StrictMode>
-				<StoreContext.Provider value={store}>
-					<App />
-				</StoreContext.Provider>
-			</StrictMode>
-		)
-	}
-})
+  if (!container) {
+    container = document.getElementById('root') as HTMLElement;
+    const root = createRoot(container);
+    root.render(
+      <StrictMode>
+        <StoreContext.Provider value={store}>
+          <App />
+        </StoreContext.Provider>
+      </StrictMode>
+    );
+  }
+});

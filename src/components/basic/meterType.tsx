@@ -1,17 +1,28 @@
+import './meterType.css';
+
 const imageTypeSelector = (meterType: string) => {
-	switch (meterType) {
-		case 'ColdWaterAreaMeter': {
-			return 'meter_cold.png'
-		}
-		case 'HotWaterAreaMeter': {
-			return 'meter_hot.png'
-		}
-		default: {
-			return `${meterType}`
-		}
-	}
-}
+  switch (meterType) {
+    case 'ColdWaterAreaMeter': {
+      return { src: 'meter_cold.png', tittle: 'ХВС' };
+    }
+    case 'HotWaterAreaMeter': {
+      return { src: 'meter_hot.png', tittle: 'ГВС' };
+    }
+    default: {
+      return { src: '', tittle: '' };
+    }
+  }
+};
 
 export const MeterType = (props: { meterType: string }) => {
-	return <img src={imageTypeSelector(props?.meterType)} alt='meter_cold'></img>
-}
+  return (
+    <div className="meterType__image__wrapper">
+      <img
+        src={imageTypeSelector(props?.meterType).src}
+        alt="meterType"
+        className="meterType__image"
+      ></img>
+      <span>{imageTypeSelector(props?.meterType).tittle}</span>
+    </div>
+  );
+};

@@ -1,4 +1,7 @@
 .table {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e5eb;
+  border-radius: 10px;
+  overflow: hidden;
 }
