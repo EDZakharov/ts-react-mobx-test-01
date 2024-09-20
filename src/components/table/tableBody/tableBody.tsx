@@ -1,58 +1,22 @@
-import { observer } from 'mobx-react-lite';
-import { FC } from 'react';
-import { useStore } from '../../../hooks/useStore';
-import { DataRow } from './datarow';
-import './tableBody.css';
+import { observer } from 'mobx-react-lite'
+import { FC, useEffect } from 'react'
+import { rootStore } from '../../../mobx/store'
+import { DataRow } from './datarow'
+import './tableBody.css'
 
-export type meter = {
-  id: string;
-  areaID: string;
-  meterType: string;
-  installationDate: string;
-  isAutomatic: string;
-  initialValues: number[];
-  description: string;
-};
+export const TableBody: FC = observer(() => {
+	const { meters } = rootStore
 
-export type address = {
-  id: string;
-  strNumberFull: string;
-  house: { id: string; address: string };
-};
+	useEffect(() => {
+		rootStore.getMeters()
+	}, [])
 
-const Tbody: FC = () => {
-  const { zkhData } = useStore();
-  const { meters, addresses } = zkhData;
-
-  const metersWithAddresses = meters?.toJSON().map((meter: meter) => {
-    const address = addresses
-      ?.toJSON()
-      .find((addr: address) => addr.id === meter.areaID);
-    return {
-      meter,
-      address,
-    };
-  });
-
-  return (
-    <tbody className="table__body">
-      {metersWithAddresses &&
-        metersWithAddresses.map(
-          ({ meter, address }: { meter: meter; address?: address }, index) => {
-            return (
-              (address && (
-                <DataRow
-                  key={meter.id}
-                  meter={meter}
-                  address={address}
-                  index={index}
-                />
-              )) || <tr key={meter.id}></tr>
-            );
-          }
-        )}
-    </tbody>
-  );
-};
-
-export const TableBody = observer(Tbody);
+	return (
+		<tbody className='table__body'>
+			{(meters.length &&
+				meters.map((meter) => <DataRow key={meter.id} meter={meter} />)) || (
+				<tr></tr>
+			)}
+		</tbody>
+	)
+})
