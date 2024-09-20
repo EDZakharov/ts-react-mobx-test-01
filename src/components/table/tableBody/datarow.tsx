@@ -3,13 +3,16 @@ import './dataRow.css'
 
 export const DataRow = (props: {
 	meter: any
+	limit: any
+	index: any
+	currentPage: any
 	// address: address
 	// index: number
 }) => {
 	return (
 		<tr className='table__body__row'>
 			<td className='row__column num'>
-				<span></span>
+				<span>{(props.currentPage - 1) * props.limit + props.index + 1}</span>
 			</td>
 			<td className='row__column type'>
 				<MeterType meterType={props.meter?._type[0]} />

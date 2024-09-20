@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react-lite'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { rootStore } from '../../../mobx/store'
 import { DataRow } from './datarow'
 import './tableBody.css'
@@ -7,16 +7,22 @@ import './tableBody.css'
 export const TableBody: FC = observer(() => {
 	const { meters } = rootStore
 
-	useEffect(() => {
-		rootStore.getMeters()
-	}, [])
+	// useEffect(() => {
+	// 	rootStore.getMeters()
+	// }, [])
 
 	return (
 		<tbody className='table__body'>
 			{(meters.length &&
-				meters.map((meter) => <DataRow key={meter.id} meter={meter} />)) || (
-				<tr></tr>
-			)}
+				meters.map((meter, index) => (
+					<DataRow
+						key={meter.id}
+						meter={meter}
+						limit={rootStore.limit}
+						currentPage={rootStore.currentPage}
+						index={index}
+					/>
+				))) || <tr></tr>}
 		</tbody>
 	)
 })

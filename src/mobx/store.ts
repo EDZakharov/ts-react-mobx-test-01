@@ -1,11 +1,6 @@
 import { flow, types } from 'mobx-state-tree'
+import { formattedFetch } from '../api/api'
 import { AreaModel, MeterModel, MetersType } from './models'
-
-type FormattedFetchType = {
-	endpoint: 'meters' | 'areas'
-	method: 'GET' | 'POST' | 'DELETE'
-	query: object
-}
 
 export const store = types
 	.model('RootStore', {
@@ -13,10 +8,9 @@ export const store = types
 		areas: types.array(AreaModel),
 		limit: 20,
 		offset: types.optional(types.number, 0),
-		totalCount: types.optional(types.number, 0),
+		metersCount: types.optional(types.number, 0),
 		currentPage: types.optional(types.number, 1),
-		totalPage: types.optional(types.number, 0),
-		isLoading: types.optional(types.boolean, false),
+		pages: types.optional(types.number, 0),
 	})
 	.actions((self) => {
 		const getMeters = flow(function* () {
@@ -24,17 +18,14 @@ export const store = types
 				const response = yield formattedFetch({
 					endpoint: 'meters',
 					method: 'GET',
-					query: { limit: self.limit, offset: self.offset },
+					query: { limit: String(self.limit), offset: String(self.offset) },
 				})
-
 				const metersArray = response.results
 
-				// const uniqMeterAreaId = new Set()
+				self.metersCount = response.count
+				self.pages = Math.ceil(self.metersCount / self.limit)
 
-				if (self.meters.length) {
-					self.meters.clear()
-				}
-
+				self.meters.clear()
 				metersArray.forEach((meter: MetersType) => {
 					const meterObj = {
 						id: meter.id,
@@ -47,31 +38,40 @@ export const store = types
 					}
 					self.meters.push(meterObj)
 				})
+
+				const uniqAreasId = new Set(
+					metersArray.map((meter: MetersType) => meter.area.id)
+				)
+
+				getAreas(uniqAreasId as Set<string>)
 			} catch (error) {
 				console.log(error)
 			}
 		})
 
-		return { getMeters }
-	})
-	.postProcessSnapshot((snapshot) => {
-		return snapshot.meters
+		const getAreas = flow(function* (ids: Set<string>) {
+			try {
+				const queryParams: Record<string, string[]> = {}
+				queryParams['id__in'] = Array.from(ids)
+				const response = yield formattedFetch({
+					endpoint: 'areas',
+					method: 'GET',
+					query: queryParams,
+				})
+
+				console.log(response)
+			} catch (error) {
+				console.error('Error fetching areas:', error)
+			}
+		})
+
+		const setPage = function (pageNumber: number) {
+			self.currentPage = pageNumber
+
+			getMeters()
+		}
+
+		return { getMeters, getAreas, setPage }
 	})
 
-// const RootStore = types.model('RootStore', {
-// 	zkhData: types.optional(MetersStore, { meters: [] }),
-// })
-
-export const rootStore = store.create({ meters: [] })
-
-async function formattedFetch({ endpoint, method, query }: FormattedFetchType) {
-	const baseUrl = 'http://showroom.eis24.me/api/v4/test/'
-	const queryString = new URLSearchParams({ ...query })
-	const response = await fetch(`${baseUrl}${endpoint}?${queryString}`, {
-		method,
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	})
-	return response.json()
-}
+export const rootStore = store.create({ meters: [], areas: [] })
