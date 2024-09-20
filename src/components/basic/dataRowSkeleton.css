@@ -1,0 +1,29 @@
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #f3f3f3 50%, #ececec 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 2s infinite;
+  border-radius: 5px;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.table__body__row {
+  height: 40px;
+}
+
+.row__column {
+  padding: 10px;
+  position: relative;
+  width: auto;
+  height: 40px;
+}

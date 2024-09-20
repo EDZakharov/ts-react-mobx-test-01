@@ -2,9 +2,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 40px;
+  height: max-content;
   padding: 12px 0;
   border-bottom: 1px solid #e0e5eb;
+  cursor: pointer;
+  color: #1f2939;
+}
+
+.row__column.desc img {
+  opacity: 0;
+  transition: 0.1s all;
+}
+
+.table__body__row:hover {
+  background-color: #f0f3f7;
+  transition: 0.1s all;
+}
+
+.table__body__row:hover .row__column.desc img {
+  opacity: 1;
+  transition: 0.1s all;
 }
 
 .row__column {
@@ -31,4 +48,10 @@
 }
 .row__column.desc {
   flex-basis: 20%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.row__column.desc img {
+  height: 40px;
 }

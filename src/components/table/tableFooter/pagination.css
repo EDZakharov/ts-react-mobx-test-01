@@ -1,2 +1,7 @@
-.table__pagination__wrapper {
+.button {
+  font-size: 14px;
+}
+
+.button:hover {
+  background-color: #ced5de5a;
 }
